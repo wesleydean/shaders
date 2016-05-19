@@ -17,17 +17,32 @@
 </head>
 <body>
 
-  <script src="vendor/three.min.js"></script>
-  <script src="vendor/OrbitControls.js"></script>
+  <script src="lib/three.min.js"></script>
+  <script src="lib/OrbitControls.js"></script>
   <script src="app.js"></script>
   
   <script type="x-shader/x-vertex" id="vertexShader">
+    //These two uniforms are given to use by ThreeJS!
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    
+    //This is the data we are being passed for each vertex.
+    attribute vec3 position;
+
+    //All shaders must have a void main function. The vertex must set gl_Position...
+    void main() {
+      // It is also the reponsibility of the vertex shader to transform the
+      // position of each vertex into "clip space".
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
   </script>
 
   <script type="x-shader/x-fragment" id="fragmentShader">
     precision highp float;
     
+    //All shaders must have a void main function. The fragment must set gl_FragColor...
     void main() {
+      // This is the same yellow color from before!
       gl_FragColor = vec4(1.0, 0.67, 0.1, 1.0);
     }
   </script>
