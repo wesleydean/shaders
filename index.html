@@ -27,8 +27,10 @@
     uniform mat4 projectionMatrix;
 
     //This is our own custom set uniform
-    uniform vec3 primary_color;
     uniform float time;
+
+    //We must declare any values we want to pass between shaders as 'varyings'.
+    varying float displacement;
 
     //This is the data we are being passed for each vertex.
     attribute vec3 position;
@@ -41,7 +43,7 @@
     void main() {
       // It is also the reponsibility of the vertex shader to transform the
       // position of each vertex into "clip space".
-      float displacement = sinZ(position, time);
+      displacement = sinZ(position, time);
 
       gl_Position = projectionMatrix * modelViewMatrix * vec4( position.xy, displacement, 1.0 );
     }
@@ -53,11 +55,18 @@
 
     //Notice that we can also use uniforms in the fragment shader.
     uniform vec3 primary_color;
-
+    uniform vec3 secondary_color;
+    
+    //Notice we have to declare the varying in our fragment shader as well.
+    varying float displacement;
+    
     //All shaders must have a void main function. The fragment must set gl_FragColor...
     void main() {
-      // This is the same yellow color from before!
-      gl_FragColor = vec4( primary_color, 1.0);
+      //We use our displacement from the vertex shader to calculate the color
+      vec3 color =    (0.5 + 0.5 * displacement) * primary_color
+                    + (0.5 - 0.5 * displacement) * secondary_color;
+
+      gl_FragColor = vec4( color, 1.0 );
     }
   </script>
 
