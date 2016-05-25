@@ -2,7 +2,7 @@ var renderer,
     scene, 
     camera, 
     mesh, 
-    start = Date.now();
+    time = 0;
 
 window.addEventListener( 'load', function() {
   setup();
@@ -30,7 +30,7 @@ function setup() {
     window.innerWidth / window.innerHeight,
     0.1,
     100 );
-  camera.position.z = 4;
+  camera.position.z = 40;
   camera.target = new THREE.Vector3( 0, 0, 0 );
   scene.add( camera );
   
@@ -38,12 +38,27 @@ function setup() {
   controls = new THREE.OrbitControls( camera, render.domElement );
   
   var primaryColor = new THREE.Color().setRGB(1.0, 0.67, 0.1);
-  
+  var secondaryColor = new THREE.Color().setRGB(0.01, 0.66, 0.67);
+
   // Your meshes will have two components - the geometry and the material.
   // Geometry determines the position and attributes of your vertices
   // Material will take shaders and handle the display of your object.
-  var geometry = new THREE.PlaneBufferGeometry( 2, 2, 16, 16 );
+  var geometry = new THREE.PlaneBufferGeometry( 20, 20, 32, 32 );
   var material = new THREE.RawShaderMaterial({
+    uniforms: {
+      primary_color: {
+        type: "v3",
+        value: primaryColor
+      },
+      secondary_color: {
+        type: "v3",
+        value: secondaryColor
+      },
+      time: {
+        type: "f",
+        value: 0.0
+      }
+    },
     vertexShader: document.getElementById( 'vertexShader' ).textContent,
   	fragmentShader: document.getElementById( 'fragmentShader' ).textContent
   });
@@ -57,5 +72,7 @@ function setup() {
 function render() {
   requestAnimationFrame( render );
   // let there be light
+  mesh.material.uniforms.time.value += 0.1;
+  
   renderer.render( scene, camera );  
 }

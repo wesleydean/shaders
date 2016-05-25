@@ -25,25 +25,39 @@
     //These two uniforms are given to use by ThreeJS!
     uniform mat4 modelViewMatrix;
     uniform mat4 projectionMatrix;
-    
+
+    //This is our own custom set uniform
+    uniform vec3 primary_color;
+    uniform float time;
+
     //This is the data we are being passed for each vertex.
     attribute vec3 position;
+
+    float sinZ(vec3 pos, float time) {
+      return sin(length(pos.xy) + time);
+    }
 
     //All shaders must have a void main function. The vertex must set gl_Position...
     void main() {
       // It is also the reponsibility of the vertex shader to transform the
       // position of each vertex into "clip space".
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      float displacement = sinZ(position, time);
+
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position.xy, displacement, 1.0 );
     }
   </script>
 
   <script type="x-shader/x-fragment" id="fragmentShader">
+    //Declare the precision we want for our floats.
     precision highp float;
-    
+
+    //Notice that we can also use uniforms in the fragment shader.
+    uniform vec3 primary_color;
+
     //All shaders must have a void main function. The fragment must set gl_FragColor...
     void main() {
       // This is the same yellow color from before!
-      gl_FragColor = vec4(1.0, 0.67, 0.1, 1.0);
+      gl_FragColor = vec4( primary_color, 1.0);
     }
   </script>
 
