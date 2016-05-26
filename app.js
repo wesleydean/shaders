@@ -43,7 +43,10 @@ function setup() {
   // Geometry determines the position and attributes of your vertices
   // Material will take shaders and handle the display of your object.
   var geometry = new THREE.PlaneBufferGeometry( 2, 2, 16, 16 );
-  var material = new THREE.MeshBasicMaterial({ color: primaryColor });
+  var material = new THREE.RawShaderMaterial({
+    vertexShader: document.getElementById( 'vertexShader' ).textContent,
+  	fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+  });
 
   material.side = THREE.DoubleSide; //Since we're rendering a plane, disable back-face culling
   //Finally, create the mesh and add it to our scene.
