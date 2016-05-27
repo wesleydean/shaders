@@ -15,11 +15,13 @@
         }
     </style>
 </head>
+
 <body>
+  <h2>Testing</h2>
   <script src="lib/three.min.js"></script>
   <script src="lib/OrbitControls.js"></script>
   <script src="app.js"></script>
-  
+
   <script type="x-shader/x-vertex" id="vertexShader">
     //These two uniforms are given to use by ThreeJS!
     uniform mat4 modelViewMatrix;
@@ -55,10 +57,10 @@
     //Notice that we can also use uniforms in the fragment shader.
     uniform vec3 primary_color;
     uniform vec3 secondary_color;
-    
+
     //Notice we have to declare the varying in our fragment shader as well.
     varying float displacement;
-    
+
     //All shaders must have a void main function. The fragment must set gl_FragColor...
     void main() {
       //We use our displacement from the vertex shader to calculate the color
